@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Ramadan Athan Time</title>
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, background-color 0.3s ease;
+            color: #333333;
+        }
+        
+        .dark-mode .container {
+            background-color: #333333;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 48px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        p {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #555555;
+        }
+        
+        .location {
+            font-style: italic;
+            color: #777777;
+            margin-bottom: 25px;
+            font-size: 30px;
+        }
+        
+        .next-prayer {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        #refresh-btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 24px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        #refresh-btn:hover {
+            background-color: #323232;
+            transform: scale(1.05);
+        }
+                
+        .dark-mode        #refresh-btn {
+            color: #1a1a1a;
+            background-color: #c9c9c9;
+        }
+
+        #weather {
+            margin-top: 30px;
+            font-size: 35px;
+            color: #000000;
+        }
+        
+        .prayer-time {
+            font-size: 36px;
+            padding: 20px 40px;
+            border-radius: 12px;
+            background-color: #f0f0f0;
+            color: #333333;
+            display: inline-block;
+            margin: 10px;
+        }
+        
+        .prayer-time span {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 48px;
+        }
+        
+        /* Increase font size for prayer icons, names, and times */
+        .prayer-times div {
+            font-size: 24px; /* Adjust this value as needed */
+        }
+        
+        .prayer-times div span,
+        .prayer-times div {
+            font-size: 36px; /* Adjust this value as needed */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px;
+            }
+        
+            h1 {
+                font-size: 36px;
+            }
+        
+            p {
+                font-size: 18px;
+            }
+        
+            .location {
+                font-size: 16px;
+            }
+        
+            .next-prayer {
+                font-size: 24px;
+            }
+        
+            #refresh-btn {
+                padding: 12px 24px;
+                font-size: 20px;
+            }
+        
+            #weather {
+                font-size: 20px;
+            }
+        
+            .prayer-time {
+                font-size: 28px;
+                padding: 15px 30px;
+            }
+        
+            .prayer-time span {
+                font-size: 36px;
+            }
+        }
+        
+        /* Dark theme styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #000000;
+        }
+
+        .container.dark-mode {
+            background-color: #333;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .location.dark-mode {
+            color: #bbb;
+        }
+
+        .prayer-time.dark-mode {
+            background-color: #444;
+            color: #eee;
+        }
+
+        #toggle-theme-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #000000;
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+
+        #toggle-theme-btn:hover {
+            color: #828282;
+        }
+        .dark-mode #toggle-theme-btn{
+            color: #ffffff;
+        }
+        .dark-mode #toggle-theme-btn:hover {
+            color: #777777;
+        }
+        .quran-verse-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .quran-verse-button:hover {
+            background-color: #333;
+            transform: scale(1.05);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        #weather-btn {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 24px;
+            margin-left: 20px;
+        }
+
+        #weather-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <a href="https://yazan92.github.io/quran-verse/" target="_blank">
+        <button class="quran-verse-button">See Quran Verse</button>
+    </a>
+    <button id="toggle-theme-btn" onclick="toggleTheme()">
+        <i class="fas fa-sun"></i>
+    </button>
+    <div class="container">
+        <h1>Ramadan Athan Time</h1>
+        <p id="date" class="location"></p>
+        <p id="location" class="location">locaction: looking for you👀</p>
+        <p id="weather" class="location">Weather: allow the website to see your locations first plz🫡</p>
+        <div id="prayer-times" class="prayer-times"></div>
+        <div id="countdown" class="countdown"></div> 
+        <button id="refresh-btn">Refresh</button>
+    </div>
+    <script>
+        let city;
+        let timeoutId;
+        let nextPrayerTimeInMilliseconds = Infinity
+        requestNotificationPermission();
+        function displayAthanTime(prayerTimes, latitude, longitude) {
+            const prayerTimesDiv = document.getElementById("prayer-times");
+            prayerTimesDiv.innerHTML = "";
+        
+            const prayerIcons = {
+                Fajr: "🌅",
+                Dhuhr: "☀️",
+                Asr: "🌞",
+                Maghrib: "🌇",
+                Isha: "🌃"
+            };
+        
+            const excludeTimes = ["Imsak", "Midnight", "Firstthird", "Lastthird", "Sunset"];
+        
+            Object.keys(prayerTimes).forEach(prayer => {
+                if (!excludeTimes.includes(prayer)) {
+                    const time24 = prayerTimes[prayer];
+                    const time12 = formatTimeTo12HourClock(time24);
+        
+                    const prayerTimeElement = document.createElement("div");
+                    if (prayerIcons[prayer]) {
+                        prayerTimeElement.innerHTML = `<span>${prayerIcons[prayer]}</span> ${prayer}: ${time12}`;
+                    } else {
+                        prayerTimeElement.textContent = `${prayer}: ${time12}`;
+                    }
+                    prayerTimesDiv.appendChild(prayerTimeElement);
+                }
+            });
+        
+            const locationElement = document.getElementById("location");
+            locationElement.textContent = `Location: ${city}`;
+        
+            displayNextPrayer(prayerTimes);
+
+            console.log("Next Prayer Time (milliseconds):", nextPrayerTimeInMilliseconds);
+        
+        }
+    
+        function displayNextPrayer(prayerTimes) {
+            const currentTime = new Date(); // Get current time in local time zone
+            const currentTimeString = currentTime.toLocaleTimeString('en-US', { hour12: false }); // Convert to 24-hour format
+            const currentTimeParts = currentTimeString.split(":");
+            const currentHour = parseInt(currentTimeParts[0]);
+            const currentMinute = parseInt(currentTimeParts[1]);
+            const currentSecond = parseInt(currentTimeParts[2]);
+        
+            console.log("Current Time:", currentTimeString);
+        
+            const excludeTimes = ["Imsak", "Midnight", "Firstthird", "Lastthird", "Sunset"];
+            const allPrayers = Object.keys(prayerTimes).filter(prayer => !excludeTimes.includes(prayer));
+            let foundNextPrayer = false;
+        
+            for (let i = 0; i < allPrayers.length; i++) {
+                const prayerName = allPrayers[i];
+                const prayerTime = prayerTimes[prayerName];
+                const prayerTimeParts = prayerTime.split(":");
+                const prayerHour = parseInt(prayerTimeParts[0]);
+                const prayerMinute = parseInt(prayerTimeParts[1]);
+        
+                if (prayerHour > currentHour || (prayerHour === currentHour && prayerMinute > currentMinute)) {
+                    // Calculate time until next prayer in milliseconds
+                    const prayerTimeMilliseconds = new Date().setHours(prayerHour, prayerMinute, 0, 0);
+                    nextPrayerTimeInMilliseconds = prayerTimeMilliseconds;
+                    foundNextPrayer = true;
+                    break;
+                }
+            }
+        
+            if (!foundNextPrayer) {
+                // If no future prayer found for today, calculate time until the first prayer of the next day
+                const firstPrayerTomorrow = prayerTimes[allPrayers[0]];
+                const firstPrayerTimeParts = firstPrayerTomorrow.split(":");
+                const firstPrayerHour = parseInt(firstPrayerTimeParts[0]);
+                const firstPrayerMinute = parseInt(firstPrayerTimeParts[1]);
+                const prayerTimeMilliseconds = new Date().setHours(firstPrayerHour, firstPrayerMinute, 0, 0) + (24 * 60 * 60 * 1000);
+                nextPrayerTimeInMilliseconds = prayerTimeMilliseconds;
+            }
+        }
+        
+        
+            
+            function formatTimeTo12HourClock(time24) {
+                const [hour24, minutes] = time24.split(":"); // Rename hours to hour24 to avoid redeclaration
+                let period = "AM";
+                let hours12 = parseInt(hour24); // Change variable name here too
+            
+                if (hours12 === 0) {
+                    hours12 = 12;
+                } else if (hours12 === 12) {
+                    period = "PM";
+                } else if (hours12 > 12) {
+                    hours12 -= 12;
+                    period = "PM";
+                }
+            
+                return `${hours12}:${minutes} ${period}`;
+            }
+    
+        function getPrayerTimes(city, country, date) {
+            const method = "2";
+            const url = `http://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=${country}&method=${method}`;
+    
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const timings = data.data.timings;
+                    displayAthanTime(timings);
+                })
+                .catch(error => {
+                    showError(`Failed to fetch prayer times: ${error.message}`);
+                });
+        }
+    
+        function showError(error) {
+            const locationElement = document.getElementById("location");
+            locationElement.textContent = `Error: ${error}`;
+        }
+    
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+    
+                    fetchWeather(latitude, longitude);
+                    fetchPrayerTimes(latitude, longitude);
+                }, showError);
+            } else {
+                showError("Geolocation is not supported by this browser.");
+            }
+        }
+    
+        function fetchPrayerTimes(latitude, longitude) {
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`)
+                .then(response => response.json())
+                .then(data => {
+                    city = data.city;
+                    const country = data.countryName;
+                    const today = new Date();
+                    const date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+                    const dateElement = document.getElementById("date");
+                    dateElement.textContent = `Today's Date: ${today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`;
+                    getPrayerTimes(city, country, date);
+                })
+                .catch(error => {
+                    showError(`Failed to fetch location: ${error.message}`);
+                });
+        }
+        function refreshPrayerTimes() {
+            const today = new Date();
+            const date = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+            getLocation();
+        
+            // Clear any existing timeout
+            clearTimeout(timeoutId);
+        }
+        
+        
+        function fetchWeather(latitude, longitude) {
+            const url = `https://api.weatherapi.com/v1/current.json?key=c93a699c6a11411d97a24438241703&q=${latitude},${longitude}`;
+    
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch weather data");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayWeather(data.current);
+                })
+                .catch(error => {
+                    showError(`Error fetching weather data: ${error.message}`);
+                });
+        }
+    
+        function displayWeather(weatherData) {
+            const weatherElement = document.getElementById("weather");
+            weatherElement.textContent = `Weather: ${weatherData.condition.text}, Temperature: ${weatherData.temp_c}°C`;
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            const themeBtn = document.getElementById("toggle-theme-btn");
+            const currentTheme = document.body.classList.contains("dark-mode") ? "Dark" : "Light";
+            themeBtn.innerHTML = `<i class="fas fa-${currentTheme === "Dark" ? "moon" : "sun"}"></i>`;
+        }
+        document.getElementById("refresh-btn").addEventListener("click", refreshPrayerTimes);
+    
+
+
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted.');
+                    } else if (permission === 'denied') {
+                        console.log('Notification permission denied.');
+                    } else {
+                        console.log('Notification permission has not been requested yet.');
+                    }
+                });
+            } else {
+                console.log('Notification API is not supported.');
+            }
+        }
+
+
+
+        function updateCountdown() {
+            const currentTime = new Date();
+            const timeUntilNextPrayer = nextPrayerTimeInMilliseconds - currentTime.getTime();
+
+            if (timeUntilNextPrayer > 0) {
+                const hours = Math.floor(timeUntilNextPrayer / (1000 * 60 * 60));
+                const minutes = Math.floor((timeUntilNextPrayer % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeUntilNextPrayer % (1000 * 60)) / 1000);
+
+                const countdownElement = document.getElementById("countdown");
+                countdownElement.innerHTML = `Time until next prayer: ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                // Handle the case when the next prayer has already passed
+                const countdownElement = document.getElementById("countdown");
+                countdownElement.innerHTML = "Next prayer is due now!";
+            }
+        }
+
+
+
+
+
+
+
+        getLocation();
+        updateCountdown();
+
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+                // Add event listener for the Weather button
+                document.getElementById("weather-btn").addEventListener("click", switchToWeather);
+        </script>
+    
+</body>
+</html>
