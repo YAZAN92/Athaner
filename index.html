@@ -361,7 +361,7 @@
     
         function getPrayerTimes(city, country, date) {
             const method = "2";
-            const url = `http://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=${country}&method=${method}`;
+            const url = `https://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=${country}&method=${method}`;
     
             fetch(url)
                 .then(response => response.json())
